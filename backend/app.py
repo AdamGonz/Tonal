@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 from aztecDateConverter import convert_to_aztec
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/aztec-date', methods=['GET'])
 def aztec_date():

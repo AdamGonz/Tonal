@@ -12,12 +12,16 @@ def convert_to_aztec(date_str):
     """
     date = datetime.strptime(date_str, "%Y-%m-%d")
     year_number, year_symbol = get_aztec_year_sign(date.year)
+    month = get_xiuhpohualli_month(date_str)
+
 
     return {
         "gregorian": date_str,
         "aztec_year_number": year_number,
-        "aztec_year_symbol": year_symbol
-        # Later: add tonalpohualli, deity, trecena, etc.
+        "aztec_year_symbol": year_symbol,
+        "aztec_month": month["month_name"],
+        "aztec_month_spanish": month["spanish_translation"],
+        "aztec_month_english": month["english_translation"]
     }
 
 
@@ -105,6 +109,8 @@ def get_xiuhpohualli_month(date_obj):
         ((3, 7), (3, 11), "Nemontemi", "Tiempo de Reflexión", "5.25 days for Reflection")
     ]
 
+    date_obj = datetime.strptime(date_obj, "%Y-%m-%d").date()
+
     for (start_month, start_day), (end_month, end_day), name, es, en in xiuhpohualli_months:
         # Handle the one month (Dec 17 – Jan 5) that wraps over year-end
         if start_month > end_month:
@@ -128,6 +134,5 @@ if __name__ == "__main__":
     ]
 
     for date_str in test_dates:
-        date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
-        result = get_xiuhpohualli_month(date_obj)
+        result = get_xiuhpohualli_month(date_str)
         print(f"{date_str} → {result['month_name']} ({result['english_translation']})")
